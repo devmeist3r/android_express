@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FitnessTracker</string>
+    <string name="imagem_do_sol">Imagem do sol</string>
+    <string name="label_imc">IMC</string>
+</resources>
