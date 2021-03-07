@@ -1,0 +1,4 @@
+com/devmeist3r/beberagua/BuildConfig.java
+ com.devmeist3r.beberagua.BuildConfig
+com/devmeist3r/beberagua/MainActivity.java
+ com.devmeist3r.beberagua.MainActivity
