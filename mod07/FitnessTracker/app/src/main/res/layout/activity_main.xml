@@ -22,13 +22,13 @@
     <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:contentDescription="@string/imagem_do_sol"
+      android:contentDescription="@string/imc_so_high_weight"
       android:src="@drawable/ic_baseline_wb_sunny_24" />
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/label_imc" />
+      android:text="@string/imc" />
 
   </LinearLayout>
 
