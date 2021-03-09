@@ -3,13 +3,10 @@ package com.devmeist3r.fitnesstracker;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,46 +28,40 @@ public class ImcActivity extends AppCompatActivity {
 
     Button btnSend = findViewById(R.id.btn_imc_send);
 
-    btnSend.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Log.d("TESTE", "Ola mundo");
-        if (!validate()) {
-          Toast.makeText(ImcActivity.this, R.string.fields_message, Toast.LENGTH_SHORT).show();
-        }
-
-        String sHeight = editHeight.getText().toString();
-        String sWeight = editWeight.getText().toString();
-
-        Log.d("TESTE", "height: " + sHeight);
-        Log.d("TESTE", "Weight: " + sWeight);
-
-        int height = Integer.parseInt(sHeight);
-        int weight = Integer.parseInt(sWeight);
-
-        double result = calculateImc(height, weight);
-
-        Log.d("TESTE", "resultado: " + result);
-
-        int imcResponseId = imcResponse(result);
-
-        AlertDialog dialog = new AlertDialog.Builder(ImcActivity.this)
-            .setTitle(getString(R.string.imc_response, result))
-            .setMessage(imcResponseId)
-            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-
-              }
-            })
-            .create();
-
-        dialog.show();
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editWeight.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(editHeight.getWindowToken(), 0);
+    btnSend.setOnClickListener(v -> {
+      Log.d("TESTE", "Ola mundo");
+      if (!validate()) {
+        Toast.makeText(ImcActivity.this, R.string.fields_message, Toast.LENGTH_SHORT).show();
       }
+
+      String sHeight = editHeight.getText().toString();
+      String sWeight = editWeight.getText().toString();
+
+      Log.d("TESTE", "height: " + sHeight);
+      Log.d("TESTE", "Weight: " + sWeight);
+
+      int height = Integer.parseInt(sHeight);
+      int weight = Integer.parseInt(sWeight);
+
+      double result = calculateImc(height, weight);
+
+      Log.d("TESTE", "resultado: " + result);
+
+      int imcResponseId = imcResponse(result);
+
+      AlertDialog dialog = new AlertDialog.Builder(ImcActivity.this)
+          .setTitle(getString(R.string.imc_response, result))
+          .setMessage(imcResponseId)
+          .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+            //
+          })
+          .create();
+
+      dialog.show();
+
+      InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(editWeight.getWindowToken(), 0);
+      imm.hideSoftInputFromWindow(editHeight.getWindowToken(), 0);
     });
   }
 
