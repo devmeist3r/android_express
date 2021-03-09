@@ -5,6 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
+  style="@style/BakcgroundColor"
   tools:context=".ImcActivity">
 
   <LinearLayout
@@ -16,6 +17,7 @@
 
     <TextView
       style="@style/TextViewForm"
+      android:fontFamily="sans-serif"
       android:text="@string/imc_desc" />
 
     <com.google.android.material.textfield.TextInputLayout
