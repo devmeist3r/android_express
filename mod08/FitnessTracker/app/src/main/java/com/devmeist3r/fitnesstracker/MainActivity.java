@@ -32,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
     mainItems.add(new MainItem(1, R.drawable.ic_baseline_wb_sunny_24, R.string.imc, Color.BLUE));
     mainItems.add(new MainItem(2, R.drawable.ic_baseline_wb_sunny_24, R.string.tmb, Color.GRAY));
 
-    // 1 -> definir o comportamento de exibiçao da recyclerView
-    // mosaic
-    // grid
-    // linear (horizontal | vertical)
     rvMain.setLayoutManager(new GridLayoutManager(this, 2));
     MainAdapter adapter = new MainAdapter(mainItems);
     adapter.setListener(id -> {
@@ -52,10 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
   }
 
-  /**
-   * é o meu adapter que pede um parametro que vai apontar parar uma celula
-   * tableView
-   **/
   private class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
 
     private List<MainItem> mainItems;
@@ -69,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
       this.listener = listener;
     }
 
-    // Espera uma celula especifica
     @NonNull
     @Override
     public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -83,15 +74,11 @@ public class MainActivity extends AppCompatActivity {
       holder.bind(mainItemCurrent);
     }
 
-    // quantidade de items
     @Override
     public int getItemCount() {
       return mainItems.size();
     }
 
-    /**
-     * Entenda como sendo a VIEW DA CELULA que esta dentro do RecyclerView
-     **/
     private class MainViewHolder extends RecyclerView.ViewHolder {
 
       public MainViewHolder(@NonNull View itemView) {
