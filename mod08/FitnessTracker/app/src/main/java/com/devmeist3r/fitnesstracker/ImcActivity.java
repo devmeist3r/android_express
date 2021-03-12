@@ -1,12 +1,16 @@
 package com.devmeist3r.fitnesstracker;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -62,8 +66,11 @@ public class ImcActivity extends AppCompatActivity {
               long calcId = SqlHelper.getInstance(ImcActivity.this).addItem("imc", result);
 
               runOnUiThread(() -> {
-                if (calcId > 0)
+                if (calcId > 0) {
                   Toast.makeText(ImcActivity.this, R.string.calc_saved, Toast.LENGTH_SHORT).show();
+                 openListActivity();
+                }
+
               });
             }).start();
           }))
@@ -75,6 +82,29 @@ public class ImcActivity extends AppCompatActivity {
       imm.hideSoftInputFromWindow(editWeight.getWindowToken(), 0);
       imm.hideSoftInputFromWindow(editHeight.getWindowToken(), 0);
     });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_list:
+        openListActivity();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
+  private void openListActivity() {
+    Intent intent = new Intent(ImcActivity.this, ListCalcActivity.class);
+    intent.putExtra("type", "imc");
+    startActivity(intent);
   }
 
   /**

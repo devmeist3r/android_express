@@ -10,6 +10,9 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.FitnessTracker">
     <activity
+      android:name=".ListCalcActivity"
+      android:parentActivityName=".ImcActivity" />
+    <activity
       android:name=".TmbActivity"
       android:parentActivityName=".MainActivity" />
     <activity
