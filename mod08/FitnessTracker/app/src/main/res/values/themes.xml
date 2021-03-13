@@ -60,4 +60,6 @@
   <style name="Theme.FitnessTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
   <style name="Theme.FitnessTracker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+  <style name="SpinnerForm" parent="TextViewForm" />
 </resources>
