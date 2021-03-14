@@ -11,4 +11,5 @@ public class Movie {
   public void setCoverURL(int coverURL) {
     this.coverURL = coverURL;
   }
+  
 }

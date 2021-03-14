@@ -22,4 +22,6 @@ public class Category {
   public void setMovies(List<Movie> movies) {
     this.movies = movies;
   }
+
+
 }
