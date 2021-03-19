@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
       List<Movie> movies = new ArrayList<>();
       for (int j = 0; j < 40; j++) {
         Movie movie = new Movie();
-        movie.setCoverURL(R.drawable.movie);
+//        movie.setCoverURL(R.drawable.movie);
         movies.add(movie);
       }
 
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
       Movie movie = movies.get(position);
-      holder.imageViewCover.setImageResource(movie.getCoverURL());
+//      holder.imageViewCover.setImageResource(movie.getCoverURL());
     }
 
     @Override
