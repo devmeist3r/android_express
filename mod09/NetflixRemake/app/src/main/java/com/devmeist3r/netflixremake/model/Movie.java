@@ -2,13 +2,13 @@ package com.devmeist3r.netflixremake.model;
 
 public class Movie {
 
-  private int coverURL;
+  private String coverURL;
 
-  public int getCoverURL() {
+  public String getCoverURL() {
     return coverURL;
   }
 
-  public void setCoverURL(int coverURL) {
+  public void setCoverURL(String coverURL) {
     this.coverURL = coverURL;
   }
   

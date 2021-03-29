@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.devmeist3r.netflixremake.model.Category;
 import com.devmeist3r.netflixremake.model.Movie;
+import com.devmeist3r.netflixremake.util.CategoryTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         )
     );
     recyclerView.setAdapter(mainAdapter);
+
+    CategoryTask categoryTask = new CategoryTask(this);
+    categoryTask.execute("https://tiagoaguiar.co/api/netflix/home");
   }
 
   private static class MovieHolder extends RecyclerView.ViewHolder {
