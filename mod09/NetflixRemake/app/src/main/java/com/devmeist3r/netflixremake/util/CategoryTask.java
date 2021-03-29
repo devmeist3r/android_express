@@ -113,6 +113,12 @@ public class CategoryTask extends AsyncTask<String, Void, List<Category>> {
         movies.add(movieobj);
       }
 
+      Category categoryObj = new Category();
+      categoryObj.setName(title);
+      categoryObj.setMovies(movies);
+
+      categories.add(categoryObj);
+
     }
 
 
