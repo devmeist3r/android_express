@@ -38,7 +38,7 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
     this.context = new WeakReference<>(context);
   }
 
-  public void setMovieDetailLoader(MovieDetailLoader movie) {
+  public void setMovieDetailLoader(MovieDetailLoader movieDetailLoader) {
     this.movieDetailLoader = movieDetailLoader;
   }
 
@@ -47,28 +47,29 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
     super.onPreExecute();
     Context context = this.context.get();
 
-    if (context != null) {
+    if (context != null)
       dialog = ProgressDialog.show(context, "Carregando", "", true);
-    }
   }
 
   @Override
   protected MovieDetail doInBackground(String... params) {
-
     String url = params[0];
 
     try {
       URL requestUrl = new URL(url);
 
       HttpsURLConnection urlConnection = (HttpsURLConnection) requestUrl.openConnection();
-      urlConnection.setReadTimeout(3000);
-      urlConnection.setConnectTimeout(3000);
+      urlConnection.setReadTimeout(2000);
+      urlConnection.setConnectTimeout(2000);
 
       int responseCode = urlConnection.getResponseCode();
+      if (responseCode > 400) {
+        throw new IOException("Error na comunicação do servidor");
+      }
 
       InputStream inputStream = urlConnection.getInputStream();
 
-      BufferedInputStream in = new BufferedInputStream(urlConnection.getInputStream());
+      BufferedInputStream in = new BufferedInputStream(inputStream);
 
       String jsonAsString = toString(in);
 
@@ -76,7 +77,6 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
       in.close();
 
       return movieDetail;
-
     } catch (MalformedURLException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -89,7 +89,6 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
   }
 
   private MovieDetail getMovieDetail(JSONObject json) throws JSONException {
-
     int id = json.getInt("id");
     String title = json.getString("title");
     String desc = json.getString("desc");
@@ -98,19 +97,16 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
 
     List<Movie> movies = new ArrayList<>();
     JSONArray movieArray = json.getJSONArray("movie");
-
     for (int i = 0; i < movieArray.length(); i++) {
       JSONObject movie = movieArray.getJSONObject(i);
       String c = movie.getString("cover_url");
       int idSimilar = movie.getInt("id");
 
       Movie similar = new Movie();
-
       similar.setId(idSimilar);
       similar.setCoverURL(c);
 
       movies.add(similar);
-
     }
 
     Movie movie = new Movie();
@@ -121,7 +117,6 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
     movie.setCast(cast);
 
     return new MovieDetail(movie, movies);
-
   }
 
   @Override
@@ -129,13 +124,8 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
     super.onPostExecute(movieDetail);
     dialog.dismiss();
 
-    if (movieDetailLoader != null) {
+    if (movieDetailLoader != null)
       movieDetailLoader.onResult(movieDetail);
-    }
-  }
-
-  public interface MovieDetailLoader {
-    void onResult(MovieDetail movieDetail);
   }
 
   private String toString(InputStream is) throws IOException {
@@ -149,4 +139,7 @@ public class MovieDetailTask extends AsyncTask<String, Void, MovieDetail> {
     return new String(baos.toByteArray());
   }
 
+  public interface MovieDetailLoader {
+    void onResult(MovieDetail movieDetail);
+  }
 }

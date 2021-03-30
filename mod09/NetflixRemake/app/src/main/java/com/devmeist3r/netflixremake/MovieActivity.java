@@ -3,6 +3,8 @@ package com.devmeist3r.netflixremake;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,16 +18,21 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devmeist3r.netflixremake.model.Movie;
+import com.devmeist3r.netflixremake.model.MovieDetail;
+import com.devmeist3r.netflixremake.util.ImageDownloaderTask;
+import com.devmeist3r.netflixremake.util.MovieDetailTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieActivity extends AppCompatActivity {
+public class MovieActivity extends AppCompatActivity implements MovieDetailTask.MovieDetailLoader {
 
   private TextView txtTitle;
   private TextView txtDesc;
   private TextView txtCast;
   private RecyclerView recyclerView;
+  private MovieAdapter movieAdapter;
+  private ImageView imgCover;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,7 @@ public class MovieActivity extends AppCompatActivity {
     txtDesc = findViewById(R.id.text_view_desc);
     txtCast = findViewById(R.id.text_view_cast);
     recyclerView = findViewById(R.id.recycler_view_similar);
+    imgCover = findViewById(R.id.image_view_cover);
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -55,19 +63,43 @@ public class MovieActivity extends AppCompatActivity {
       ((ImageView) findViewById(R.id.image_view_cover)).setImageDrawable(drawable);
     }
 
-    txtTitle.setText("Batman Begins");
-    txtDesc.setText(R.string.lorem);
-    txtCast.setText(getString(R.string.cast, "Teste"));
-
     List<Movie> movies = new ArrayList<>();
-    for (int i = 0; i < 30; i++) {
-      Movie movie = new Movie();
-      movies.add(movie);
-    }
-
+    movieAdapter = new MovieAdapter(movies);
     recyclerView.setAdapter(new MovieAdapter(movies));
     recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
+    Bundle extras = getIntent().getExtras();
+    if (extras != null) {
+      int id = extras.getInt("id");
+      MovieDetailTask movieDetailTask = new MovieDetailTask(this);
+      movieDetailTask.setMovieDetailLoader(this);
+      String teste = "https://tiagoaguiar.co/api/netflix/" + id;
+      Log.d("Teste", "onCreate: " + teste);
+      movieDetailTask.execute("https://tiagoaguiar.co/api/netflix/" + id);
+    }
+
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    if (item.getItemId() == android.R.id.home) {
+      finish();
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onResult(MovieDetail movieDetail) {
+    txtTitle.setText(movieDetail.getMovie().getTitle());
+    txtDesc.setText(movieDetail.getMovie().getDesc());
+    txtCast.setText(movieDetail.getMovie().getCast());
+
+    ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask(imgCover);
+    imageDownloaderTask.setShadowEnabled(true);
+    imageDownloaderTask.execute(movieDetail.getMovie().getCoverURL());
+
+    movieAdapter.setMovies(movieDetail.getMoviesSimilar());
+    movieAdapter.notifyDataSetChanged();
   }
 
   private static class MovieHolder extends RecyclerView.ViewHolder {
@@ -83,10 +115,15 @@ public class MovieActivity extends AppCompatActivity {
 
   private class MovieAdapter extends RecyclerView.Adapter<MovieActivity.MovieHolder> {
 
-    private final List<Movie> movies;
+    private List<Movie> movies;
 
     private MovieAdapter(List<Movie> movies) {
       this.movies = movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+      this.movies.clear();
+      this.movies.addAll(movies);
     }
 
     @NonNull
@@ -103,6 +140,7 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
       Movie movie = movies.get(position);
+      new ImageDownloaderTask(holder.imageViewCover).execute(movie.getCoverURL());
     }
 
     @Override
