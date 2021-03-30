@@ -57,12 +57,6 @@ public class MovieActivity extends AppCompatActivity implements MovieDetailTask.
     LayerDrawable drawable =
         (LayerDrawable) ContextCompat.getDrawable(this, R.drawable.shadows);
 
-    if (drawable != null) {
-      Drawable movieCover = ContextCompat.getDrawable(this, R.drawable.movie_4);
-      drawable.setDrawableByLayerId(R.id.cover_drawble, movieCover);
-      ((ImageView) findViewById(R.id.image_view_cover)).setImageDrawable(drawable);
-    }
-
     List<Movie> movies = new ArrayList<>();
     movieAdapter = new MovieAdapter(movies);
     recyclerView.setAdapter(new MovieAdapter(movies));
